@@ -2,8 +2,8 @@ import random
 
 
 class Batter:
-    def __init__(self, pid, name, next_in_order, single=.22, double=.09, triple=.025, home_run=.05,
-                 walk=.1, strikeout=.14, bbo=.35):
+    def __init__(self, pid, name, next_in_order, single=.16, double=.07, triple=.025, home_run=.03,
+                 walk=.05, strikeout=.14, bbo=.50):
         self.pid = pid
         self.name = name
         self.next = next_in_order
@@ -28,3 +28,7 @@ class Batter:
                 return k
             numb += v
         assert "ab did not come to an outcome!!!"
+
+    def store_fpts(self):
+        self.fpts_collection.append(self.current_fpts)
+        self.current_fpts = 0
