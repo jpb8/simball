@@ -2,11 +2,10 @@ import random
 
 
 class Batter:
-    def __init__(self, pid, name, next_in_order, single=.16, double=.07, triple=.025, home_run=.03,
+    def __init__(self, pid, name, single=.16, double=.07, triple=.025, home_run=.03,
                  walk=.05, strikeout=.14, bbo=.50):
         self.pid = pid
         self.name = name
-        self.next = next_in_order
         self.current_fpts = 0
         self.outcomes = {
             "single": single,

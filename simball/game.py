@@ -1,35 +1,39 @@
+from .diamond import Diamond
+
+
 class Game:
-    def __init__(self, home_ab, away_ab, diamond, lineup_cnt=9):
+    def __init__(self, home_team, away_team, lineup_cnt=9):
         self.score = {"away": [], "home": []}
-        self.home_ab = home_ab
-        self.away_ab = away_ab
-        self.home_score = 0
-        self.away_score = 0
-        self.diamond = diamond
+        self.home_team = home_team # should these be there own Objects?
+        self.away_team = away_team # should these be there own Objects?
+        self.diamond = Diamond()
         self.lineup_cnt = lineup_cnt
         self.inning = 1
         self.complete = False
 
-    def generate_outcome_percentages(self):
-        pass
-
     def play_ball(self):
         self.inning = 1
         while self.inning < 10:
-            self.away_ab = self.half_inning(self.away_ab)
+            self.half_inning("a")
             self.diamond.clear_bases()
-            self.home_ab = self.half_inning(self.home_ab)
+            self.half_inning("h")
             self.diamond.clear_bases()
 
-    def half_inning(self, ab):
+    def half_inning(self, team):
+        if team == "a":
+            team_ab = self.away_team
+        else:
+            team_ab = self.home_team
         outs = 0
         while outs < 3:
+            ab = team_ab.rotate_order()
             outcome = ab.ab()
+            rbis = 0
             if outcome in ["k", "bbo"]:
                 outs += 1
             elif outcome == "home_run":
                 rbis = self.diamond.handle_outcome(outcome, ab)
-                ab.current_fpts += 14 + (rbis * 2)
+                ab.current_fpts += 10 + (rbis * 2)
             elif outcome == "triple":
                 rbis = self.diamond.handle_outcome(outcome, ab)
                 ab.current_fpts += 8 + (rbis * 2)
@@ -44,6 +48,5 @@ class Game:
                 ab.current_fpts += 2 + (rbis * 2)
             else:
                 print("IDK", ab.name, outcome)
-            ab = ab.next
+            team_ab.score += rbis
         self.inning += 0.5
-        return ab
